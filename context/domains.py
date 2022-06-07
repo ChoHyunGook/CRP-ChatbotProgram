@@ -1,5 +1,6 @@
 # context, fname,train,test,id,label
 from dataclasses import dataclass
+from abc import * #abc는 abstract base class의 약자
 
 
 @dataclass
@@ -60,3 +61,35 @@ class Dataset:
 
     @label.setter
     def label(self, label): self._label = label
+
+
+class PrinterBase(metaclass=ABCMeta):
+    @abstractmethod
+    def dframe(self):
+        pass
+    # new_file, csv, xls, json
+
+class ReaderBase(metaclass=ABCMeta):
+
+    @abstractmethod
+    def new_file(self): pass
+
+    @abstractmethod
+    def csv(self): pass
+
+    @abstractmethod
+    def xls(self): pass
+
+    @abstractmethod
+    def json(self):pass
+
+
+    #Reader
+class Reader(ReaderBase):
+        def main(self):
+            pass
+
+    #Printer
+class Printer(PrinterBase):
+        def main(print):
+            pass
