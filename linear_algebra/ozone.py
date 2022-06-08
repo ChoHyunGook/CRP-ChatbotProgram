@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 class Ozone(object):
 
     def __init__(self):
+        #url = "https://raw.githubusercontent.com/reisanar/datasets/master/ozone.data.csv"
+        #c = pd.read_csv(url)
         self.df = pd.read_csv('./data/ozone.csv')
         self.training_data = self.df[['temp', 'ozone']]
         self.W = np.random.rand(1, 1)
@@ -46,8 +48,8 @@ class Ozone(object):
 
 
     # 5. loss function 정의
-    def loss_func(self, x, t):
-        y = np.dot(x, self.W) + self.b
+    def loss_func(self, x, t):#선형회귀모델
+        y = np.dot(x, self.W) + self.b #내적 y=Wx+b 선형식
         return np.mean(np.power((t - y), 2))  # 최소제곱법
 
     # 6. 학습종료 후 예측값 계산 함수

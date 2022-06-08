@@ -2,6 +2,9 @@
 from dataclasses import dataclass
 from abc import * #abc는 abstract base class의 약자
 
+import googlemaps
+import pandas as pd
+
 
 @dataclass
 class Dataset:
@@ -72,24 +75,34 @@ class PrinterBase(metaclass=ABCMeta):
 class ReaderBase(metaclass=ABCMeta):
 
     @abstractmethod
-    def new_file(self): pass
+    def new_file(self,file)->str: pass
 
     @abstractmethod
-    def csv(self): pass
+    def csv(self)->object: pass
 
     @abstractmethod
-    def xls(self): pass
+    def xls(self)->object: pass
 
     @abstractmethod
-    def json(self):pass
+    def json(self)->object: pass
 
 
     #Reader
-class Reader(ReaderBase):
-        def main(self):
-            pass
+class Reader(ReaderBase):#ReaderBase가 부모 Reader가 자식
+        def new_file(self, file) -> str:
+            return file.context + file.fname
+        def csv(self,fname) -> object:
+            return pd.read_csv(f'{self.new_file(fname)}.csv',encoding='UTF-8',thousands=',')
+        def xls(self,fname,header,cols) -> object:
+            return pd.read_excel(f'{self.new_file(fname)}.xls', header=header, usecols=cols, engine='openpyxl')
+        def json(self,fname) -> object:
+            return pd.read_json(f'{self.new_file(fname)}.json',encoding='UTF-8',index_col=0)
+        def gmaps(self)->object:
+            return googlemaps.Client(key='')
 
     #Printer
 class Printer(PrinterBase):
-        def main(print):
+        def dframe(self, this):
             pass
+
+

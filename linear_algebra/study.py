@@ -52,7 +52,7 @@ class Study(object):
         return np.dot(x, self.W) + self.b  # Hypothesis, Linear Regression Model
 
     def study(self):
-        learning_rate = 0.0001
+        learning_rate = 0.0001 #6
         x_data = self.x_data
         t_data = self.t_data
         f = lambda x: self.loss_func(x_data, t_data)
