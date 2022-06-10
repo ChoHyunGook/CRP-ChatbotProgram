@@ -123,8 +123,10 @@ class Reader(ReaderBase):#ReaderBase가 부모 Reader가 자식
             return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols)
         def json(self,file) -> object:
             return pd.read_json(f'{self.new_file(file)}.json',encoding='UTF-8')
-        def gmaps(self)->object:
+        @staticmethod
+        def gmaps():
             return googlemaps.Client(key='')
+
 
     #Printer
 class Printer(PrinterBase):
