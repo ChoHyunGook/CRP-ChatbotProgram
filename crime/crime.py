@@ -110,5 +110,5 @@ if __name__ == '__main__':
     #s.save_police_pos()
     #s.save_cctv_pos()
     #s.draw_crime_map('geo_simple')
-    s.folium_test()
+    #s.folium_test()
 
