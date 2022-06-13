@@ -202,13 +202,22 @@ class Solution(Reader):
 
 
     def save_police_norm(self):
+        file = self.file
+        file.context = './data/'
+        file.fname = 'crime_in_seoul'
+        crime_in_seoul = self.csv(file)
+        # print(crime_in_seoul)
+        '''
+             관서명  살인 발생  살인 검거  강도 발생  강도 검거  강간 발생  강간 검거  절도 발생  절도 검거  폭력 발생  폭력 검거
+        0    중부서      2      2      3      2    105     65   1395    477   1355   1170
+        1    종로서      3      3      6      5    115     98   1070    413   1278   1070
+        '''
         '''
                 표준화는 데이터의 평균을 0, 표준편차를 1로 만드는 것이다.
                 x = (x - mu) / sigma
                 scale = (x - np.mean(x, axis=0)) / np.std(x, axis=0)
                 정규화는 최대값을 1, 최솟값을 0으로 만드는 것이다.
                 '''
-        file = self.file
         file.context = './save/'
         file.fname = 'police_pos'
         police_pos = self.csv(file)
@@ -219,9 +228,13 @@ class Solution(Reader):
         police['절도검거율'] = police['절도 검거'].astype(int) / police['절도 발생'].astype(int) * 100
         police['폭력검거율'] = police['폭력 검거'].astype(int) / police['폭력 발생'].astype(int) * 100
         police.drop(columns={'살인 검거','강도 검거','강간 검거', '절도 검거', '폭력 검거'},axis=1,inplace=True)
-        police.to_csv('./save/police.csv',sep=',',encoding='UTF-8')
+
         for i in self.crime_rate_columns:
-            police.loc[police[i]>100, 1] = 100 # 데이터값의 기간 오류로 100을 넘으면 100으로 계산
+            # loc() 는 데이터프레임의 행이나 컬럼에 index로 접근한다.
+            # 그래서 police[i] 로 접근하도록 한다.
+            police[i].loc[police[i] > 100] = 100  # 데이터값의 기간 오류로 100을 넘으면 100으로 계산
+        police.to_csv('./save/police.csv', sep=',', encoding='UTF-8')
+
         police.rename(columns={
             '살인 발생' : '살인',
             '강도 발생' : '강도',
@@ -229,15 +242,25 @@ class Solution(Reader):
             '절도 발생' : '절도',
             '폭력 발생' : '폭력',
         },inplace=True)
+        print(police)
         x = police[self.crime_rate_columns].values
         min_max_scalar = preprocessing.MinMaxScaler()
-        """          
-                스케일링은 선형변환을 적용하여          
-                전체 자료의 분포를 평균 0, 분산 1이 되도록 만드는 과정
-                정규화 normalization         
-                많은 양의 데이터를 처리함에 있어 데이터의 범위(도메인)를 일치시키거나         
-                분포(스케일)를 유사하게 만드는 작업
-                """
+        """     
+        피쳐 스케일링(Feature scalining)은 해당 피쳐들의 값을 일정한 수준으로 맞춰주는 것이다.
+        이때 적용되는 스케일링 방법이 표준화(standardization) 와 정규화(normalization)다.
+        
+        1단계: 표준화(공통 척도)를 진행한다.
+            표준화는 정규분포를 데이터의 평균을 0, 분산이 1인 표준정규분포로 만드는 것이다.
+            x = (x - mu) / sigma
+            scale = (x - np.mean(x, axis=0)) / np.std(x, axis=0)
+        2단계: 이상치 발견 및 제거
+        3단계: 정규화(공통 간격)를 진행한다.
+            정규화에는 평균 정규화, 최소-최대 정규화, 분위수 정규화가 있다.
+             * 최소최대 정규화는 모든 데이터를 최대값을 1, 최솟값을 0으로 만드는 것이다.
+            도메인은 데이터의 범위이다.
+            스케일은 데이터의 분포이다.
+            목적은 도메인을 일치시키거나 스케일을 유사하게 만든다.     
+        """
         x_scaled = min_max_scalar.fit_transform(x.astype(float))
         police_norm = pd.DataFrame(x_scaled, columns=self.crime_columns, index=police.index)
         police_norm[self.crime_rate_columns] = police[self.crime_rate_columns]
