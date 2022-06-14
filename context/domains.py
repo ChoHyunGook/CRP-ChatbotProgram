@@ -1,4 +1,5 @@
 # context, fname,train,test,id,label
+import json
 from dataclasses import dataclass
 from abc import * #abc는 abstract base class의 약자
 
@@ -131,6 +132,9 @@ class Reader(ReaderBase):#ReaderBase가 부모 Reader가 자식
 
         def json(self, path: str) -> PandasDataFrame:
             return pd.read_json(f'{self.new_file(path)}.json', encoding='UTF-8')
+
+        def map_json(self, path:str)->object:
+            return json.load(open(f'{self.new_file(path)}.json', encoding='UTF-8'))
 
         @staticmethod
         def gmaps() -> GooglemapsClient:
