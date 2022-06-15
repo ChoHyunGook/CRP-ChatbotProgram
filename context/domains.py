@@ -130,6 +130,9 @@ class Reader(ReaderBase):#ReaderBase가 부모 Reader가 자식
         def xls(self, path: str, header: str, cols: str, skiprows) -> PandasDataFrame:
             return pd.read_excel(f'{self.new_file(path)}.xls', header=header, usecols=cols, skiprows=skiprows)
 
+        def xlsx(self, path: str, header: str, cols: str, skiprows) -> PandasDataFrame:
+            return pd.read_excel(f'{self.new_file(path)}.xlsx', header=header, usecols=cols, skiprows=skiprows)
+
         def json(self, path: str) -> PandasDataFrame:
             return pd.read_json(f'{self.new_file(path)}.json', encoding='UTF-8')
 
