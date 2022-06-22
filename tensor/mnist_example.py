@@ -50,8 +50,8 @@ class Solution(object):
 
     def training_evaluation_models(self,model):
         self.model.fit(self.x_train, self.y_train, epochs=5)#fit은 안에서 룹이 돌고있다.
+        self.model.evaluate(self.x_test, self.y_test, verbose=2)
 
-        model.evaluate(x_test, y_test, verbose=2)
 
     def test(self):
         pass
