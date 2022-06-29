@@ -15,7 +15,7 @@ Jinja2==2.11.2
 JPype1
 jsonify==0.5
 jupyter==1.0.0
-konlpy==0.5.2
+konlpy==0.6.0
 lxml
 MarkupSafe==1.1.1
 mccabe
@@ -33,6 +33,7 @@ seaborn
 selenium==3.141.0
 six==1.15.0
 SQLAlchemy==1.3.20
+mysqlclient==2.1.0
 tensorflow==2.6.0
 tensorflow-gpu==2.6.0
 tqdm
